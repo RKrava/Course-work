@@ -7,6 +7,9 @@ namespace Course_work
     class Customer
     {
         string Name;
-
+        public Customer(string name)
+        {
+            Name = name;
+        }
     }
 }

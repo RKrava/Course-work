@@ -6,12 +6,12 @@ namespace Course_work
 {
     class OrderProduct
     {
-        public OrderProduct(Product product, int quantity)
+        public OrderProduct(Product product, int quantitytobuy)
         {
             Product = product;
-            Quantity = quantity;
+            QuantityToBuy = quantitytobuy;
         }
         public Product Product { get; set; }
-        public int Quantity { get; set; }
+        public int QuantityToBuy { get; set; }
     }
 }

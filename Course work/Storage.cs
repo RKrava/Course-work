@@ -7,13 +7,17 @@ namespace Course_work
     class Storage
     {
         List<Product> Products;
-        PurchaseQueue PurchaseQueue;
-        List<ComplitedOrder> HistoryOrder;
+        PurchaseQueue PurchaseQueue = new PurchaseQueue();
+        List<ComplitedOrder> HistoryOrder = new List<ComplitedOrder>();
 
-        public void MakeOrder(Customer customer, List<OrderProduct> orderProducts)
+        public Storage(List<Product> products)
+        {
+            Products = products;
+        }
+        public Order MakeOrder(Customer customer, List<OrderProduct> orderProducts)
         {
             Order order = new Order(orderProducts, customer, this);
-
+            return order;
         }
         public bool CheckInStock(Product product, int quantity)
         {
@@ -32,13 +36,13 @@ namespace Course_work
             List<OrderProduct> purchasequeue = new List<OrderProduct>();
             foreach (OrderProduct item in order.OrderProducts)
             {
-                if (CheckInStock(item.Product, item.Quantity))
+                if (CheckInStock(item.Product, item.QuantityToBuy))
                 {
                     foreach (var product in Products)
                     {
                         if (item.Product.Id == product.Id)
                         {
-                            product.RealseOrder(item.Quantity);
+                            product.RealseOrder(item.QuantityToBuy);
                         }
                     }
                 }
@@ -50,7 +54,7 @@ namespace Course_work
                     {
                         if (item.Product.Id == good.Id)
                         {
-                            lack = good.Quantity - item.Quantity;
+                            lack = item.QuantityToBuy - good.Quantity;
                         }
                     }
                     OrderProduct product = new OrderProduct(item.Product,lack);
