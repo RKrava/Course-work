@@ -6,7 +6,7 @@ namespace Course_work
 {
     class Order
     {
-        static int NumberOfOrders;
+        static int NumberOfOrders = 0;
         int Ordernumber;
         bool completed;
         public Order(List<OrderProduct> orderProducts, Customer customer, Storage storage)
