@@ -8,34 +8,27 @@ namespace Course_work
     {
         static int NumberOfOrders;
         int Ordernumber;
-        List<OrderProduct> OrderProducts;
-        Customer Customer;
         bool completed;
         public Order(List<OrderProduct> orderProducts, Customer customer, Storage storage)
         {
             OrderProducts = orderProducts;
             Customer = customer;
             Ordernumber = ++NumberOfOrders;
+            Storage = storage;
             completed = false;
-            ExecuteOrder(storage, customer);
         }
-        public void ExecuteOrder(Storage storage, Customer customer)
+        public Order(List<OrderProduct> orderProducts)
         {
-            foreach(OrderProduct item in OrderProducts)
-            {
-                if(storage.CheckInStock(item.GetProduct, item.GetQuantity))
-                {
-                    storage.ExecuteOrder(OrderProducts, this, storage, customer);
-                }
-                else
-                {
-
-                }
-            }
+            OrderProducts = orderProducts;
+            Ordernumber = ++NumberOfOrders;
+            completed = false;
         }
         public void CompleteOrder()
         {
             completed = true;
         }
+        public List<OrderProduct> OrderProducts { get; set; }
+        public Storage Storage { get; set; }
+        public Customer Customer { get; set; }
     }
 }

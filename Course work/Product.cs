@@ -6,31 +6,15 @@ namespace Course_work
 {
     class Product
     {
-        int Id;
-        int Quantity;
-        public Product()
-        {
-
-        }
-        public Product(int id, int quantity)
+        string Title;
+        public Product(int id, int quantity, string title)
         {
             Id = id;
             Quantity = quantity;
+            Title = title;
         }
-        public int GetId
-        {
-            get
-            {
-                return Id;
-            }
-        }
-        public int GetQuantity
-        {
-            get
-            {
-                return Quantity;
-            }
-        }
+        public int Id { get; set; }
+        public int Quantity { get; set; }
         public void AddQuantity(int increase)
         {
             Quantity += increase;

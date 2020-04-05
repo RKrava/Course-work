@@ -6,11 +6,11 @@ namespace Course_work
 {
     class PurchaseQueue
     {
-        List<Order> Orders;
-        private bool CanExecute()
+        public Queue<Order> Orders { get; set; }
+        private bool TryExecute()
         {
             //add logic
-            return false; 
+            return false;
         }
     }
 }

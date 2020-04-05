@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Linq;
 namespace Course_work
 {
     class Storage
@@ -17,34 +17,65 @@ namespace Course_work
         }
         public bool CheckInStock(Product product, int quantity)
         {
-            foreach(var item in Products)
+            foreach (var item in Products)
             {
-                if (item.GetId == product.GetId && item.GetQuantity >= quantity)
+                if (item.Id == product.Id && item.Quantity >= quantity)
                 {
                     return true;
                 }
             }
             return false;
         }
-        public void ExecuteOrder(List<OrderProduct> orderproducts, Order order, Storage storage, Customer customer)
+        public void ExecuteOrder(Order order)
         {
-            foreach(var item in orderproducts)
+            bool completed = true;
+            List<OrderProduct> purchasequeue = new List<OrderProduct>();
+            foreach (OrderProduct item in order.OrderProducts)
             {
-                foreach(var product in Products)
+                if (CheckInStock(item.Product, item.Quantity))
                 {
-                    if(item.GetProduct.GetId == product.GetId)
+                    foreach (var product in Products)
                     {
-                        product.RealseOrder(item.GetQuantity);
-                        order.CompleteOrder();
-                        storage.AddToHistory(storage, order, orderproducts, customer);
+                        if (item.Product.Id == product.Id)
+                        {
+                            product.RealseOrder(item.Quantity);
+                        }
                     }
                 }
+                else
+                {
+                    completed = false;
+                    int lack = 0;
+                    foreach(var good in Products)
+                    {
+                        if (item.Product.Id == good.Id)
+                        {
+                            lack = good.Quantity - item.Quantity;
+                        }
+                    }
+                    OrderProduct product = new OrderProduct(item.Product,lack);
+                    purchasequeue.Add(product);
+                }
+            }
+            if (completed)
+            {
+                order.CompleteOrder();
+                AddToHistory(order);
+            }
+            else
+            {
+                AddToPurchaseQueue(purchasequeue);
             }
         }
-        public void AddToHistory(Storage storage, Order order, List<OrderProduct> orderProducts, Customer customer)
+        public void AddToHistory(Order order)
         {
-            ComplitedOrder complitedOrder = new ComplitedOrder(orderProducts, customer, DateTime.Now, storage);
+            ComplitedOrder complitedOrder = new ComplitedOrder(order.OrderProducts, order.Customer, DateTime.Now, order.Storage);
             HistoryOrder.Add(complitedOrder);
+        }
+        public void AddToPurchaseQueue(List<OrderProduct> orderProducts)
+        {
+            Order order = new Order(orderProducts);
+            PurchaseQueue.Orders.Enqueue(order);
         }
     }
 }
