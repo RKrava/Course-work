@@ -7,11 +7,11 @@ namespace Course_work
     {
         static void Main(string[] args)
         {
-            var products = new List<Product>();
             var product1 = new Product(123, 11, "ball");
-            products.Add(product1);
+            var products = new List<Product>();
             var customer = new Customer("Roman");
             var storage = new Storage(products);
+            products.Add(product1);
             List<OrderProduct> list = new List<OrderProduct>();
             OrderProduct orderProduct = new OrderProduct(product1, 22);
             list.Add(orderProduct);

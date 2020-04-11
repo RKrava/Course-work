@@ -81,5 +81,9 @@ namespace Course_work
             Order order = new Order(orderProducts);
             PurchaseQueue.Orders.Enqueue(order);
         }
+        public void AddProducts()
+        {
+            //add logic
+        }
     }
 }
