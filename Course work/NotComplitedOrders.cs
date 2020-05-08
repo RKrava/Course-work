@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Course_work
 {
+    //TODO: МОжет таки OrderQueue?
     public class NotComplitedOrders
     {
         public List<Order> Orders { get; set; }
