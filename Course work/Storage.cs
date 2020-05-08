@@ -1,21 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
+using Course_work.Models;
+
 namespace Course_work
 {
-    class Storage
+    public class Storage
     {
-        List<Product> Products;
-        PurchaseQueue PurchaseQueue = new PurchaseQueue();
+        public string Name;
+
+        public List<Product> Products = new List<Product>();
+        NotComplitedOrders NotComplitedOrders = new NotComplitedOrders();
         List<ComplitedOrder> HistoryOrder = new List<ComplitedOrder>();
 
-        public Storage(List<Product> products)
+        public Storage(List<Product> products, string name)
         {
             Products = products;
+            Name = name;
+        }
+        public Storage(string name)
+        {
+            Name = name;
         }
         public Order MakeOrder(Customer customer, List<OrderProduct> orderProducts)
         {
+            for(int i = 0; i < orderProducts.Count; i++)
+            {
+                for(int j = 0; j < orderProducts.Count; j++)
+                {
+                    if (orderProducts[i].Product.Id == orderProducts[j].Product.Id && i != j) 
+                    { 
+                        orderProducts[i].QuantityToOrder += orderProducts[j].QuantityToOrder; 
+                    }
+                }
+            }
             Order order = new Order(orderProducts, customer, this);
             return order;
         }
@@ -30,60 +47,59 @@ namespace Course_work
             }
             return false;
         }
-        public void ExecuteOrder(Order order)
+        public bool ExecuteOrder(Order order)
         {
-            bool completed = true;
             List<OrderProduct> purchasequeue = new List<OrderProduct>();
+            bool executable = true;
             foreach (OrderProduct item in order.OrderProducts)
             {
-                if (CheckInStock(item.Product, item.QuantityToBuy))
+                if (!CheckInStock(item.Product, item.QuantityToOrder)) { executable = false; break; }
+                }
+            if (executable)
+            {
+                foreach (OrderProduct item in order.OrderProducts)
                 {
                     foreach (var product in Products)
                     {
                         if (item.Product.Id == product.Id)
                         {
-                            product.RealseOrder(item.QuantityToBuy);
+                            product.RealseOrder(item.QuantityToOrder);
                         }
                     }
                 }
-                else
-                {
-                    completed = false;
-                    int lack = 0;
-                    foreach(var good in Products)
-                    {
-                        if (item.Product.Id == good.Id)
-                        {
-                            lack = item.QuantityToBuy - good.Quantity;
-                        }
-                    }
-                    OrderProduct product = new OrderProduct(item.Product,lack);
-                    purchasequeue.Add(product);
-                }
-            }
-            if (completed)
-            {
                 order.CompleteOrder();
                 AddToHistory(order);
             }
             else
             {
-                AddToPurchaseQueue(purchasequeue);
+                NotComplitedOrders.Orders.Add(order);
             }
+            return executable;
         }
         public void AddToHistory(Order order)
         {
             ComplitedOrder complitedOrder = new ComplitedOrder(order.OrderProducts, order.Customer, DateTime.Now, order.Storage);
             HistoryOrder.Add(complitedOrder);
         }
-        public void AddToPurchaseQueue(List<OrderProduct> orderProducts)
+        public void AddProduct(Product product)
         {
-            Order order = new Order(orderProducts);
-            PurchaseQueue.Orders.Enqueue(order);
-        }
-        public void AddProducts()
-        {
-            //add logic
+            bool available = false;
+            if (Products != null)
+            {
+                foreach (var item in Products)
+                {
+                    if (product.Id == item.Id)
+                    {
+                        item.AddQuantity(product.Quantity);
+                        available = true;
+                    }
+                }
+            }
+            if (!available)
+            {
+                Products.Add(new Product(product, product.Quantity));
+            }
+            NotComplitedOrders.TryExecuteAllOrders();
         }
     }
 }

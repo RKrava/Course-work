@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Course_work
+namespace Course_work.Models
 {
-    class ComplitedOrder : Order
+    public class ComplitedOrder : Order
     {
-        DateTime Leadtime;
+        public DateTime Leadtime { get; }
+
         public ComplitedOrder(List<OrderProduct> orderProducts, Customer customer, DateTime leadtime, Storage storage) : base(orderProducts, customer, storage)
         {
             Leadtime = leadtime;
