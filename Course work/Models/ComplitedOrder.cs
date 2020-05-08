@@ -7,7 +7,8 @@ namespace Course_work.Models
     {
         public DateTime Leadtime { get; }
 
-        public ComplitedOrder(List<OrderProduct> orderProducts, Customer customer, DateTime leadtime, Storage storage) : base(orderProducts, customer, storage)
+        public ComplitedOrder(List<OrderProduct> orderProducts, Customer customer, DateTime leadtime, Storage storage)
+            : base(orderProducts, customer, storage)
         {
             Leadtime = leadtime;
         }

@@ -10,8 +10,10 @@ namespace Course_work.Models
         static void Main(string[] args)
         {
             Console.WriteLine("Course work var.5 Kravchenko Roman");
-            
-            List <Customer> customers = new List<Customer>();
+
+            //TODO: Можно добавить какой-то шаблон, заготовленные данные, которые ты сразу считываешь с файла
+            //TODO: чтобы не вводить каждый раз
+            List<Customer> customers = new List<Customer>();
             List <Storage> storages = new List<Storage>();
 
             Console.WriteLine("To start using program you need to create a customer and storage");
@@ -30,6 +32,7 @@ namespace Course_work.Models
                 Console.WriteLine("If you want to add new Storage write 4");
                 Console.WriteLine("If you want to see all products write 5");
                 var str = Console.ReadLine();
+                //TODO: выноси кейсы в методы, очень трудно читать
                 switch(str){
                     case "1":
                         {
@@ -40,6 +43,7 @@ namespace Course_work.Models
                                 { 
                                     Console.WriteLine($"{i+1}. {storages[i].Name}");
                                 }
+                                //TODO: нейминг
                                 int number_storage = int.Parse(Console.ReadLine());
 
                                 Console.WriteLine("Write product title: ");
@@ -60,6 +64,7 @@ namespace Course_work.Models
                         {
                             try
                             {
+                                //TODO: можно вынести в метод ShowStorages или StoragesSelect
                                 Console.WriteLine("Select the storage, just write the number (start with 1)");
                                 for (int i = 0; i < storages.Count; i++)
                                 {

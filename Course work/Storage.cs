@@ -23,7 +23,8 @@ namespace Course_work
         }
         public Order MakeOrder(Customer customer, List<OrderProduct> orderProducts)
         {
-            for(int i = 0; i < orderProducts.Count; i++)
+            //TODO: Это считается не правильно. Проверь. Лучше создай новый пустой словарь и через него делай
+            for (int i = 0; i < orderProducts.Count; i++)
             {
                 for(int j = 0; j < orderProducts.Count; j++)
                 {
@@ -47,10 +48,13 @@ namespace Course_work
             }
             return false;
         }
+        //TODO: TryExecute. Погугли про паттерн TryAction в C#
         public bool ExecuteOrder(Order order)
         {
+            //TODO: Не используется?
             List<OrderProduct> purchasequeue = new List<OrderProduct>();
             bool executable = true;
+            //TODO: Попробуй использовать Any/All методы из LINQ
             foreach (OrderProduct item in order.OrderProducts)
             {
                 if (!CheckInStock(item.Product, item.QuantityToOrder)) { executable = false; break; }
@@ -84,6 +88,8 @@ namespace Course_work
         public void AddProduct(Product product)
         {
             bool available = false;
+
+            //TODO: Тут может быть null? Если да, то на строчке 106 оно упадет
             if (Products != null)
             {
                 foreach (var item in Products)
