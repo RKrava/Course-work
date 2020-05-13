@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Course_work
 {
-    public class NotComplitedOrders
+    public class NotCompletedOrders
     {
         public List<Order> Orders { get; set; }
 
-        public NotComplitedOrders()
+        public NotCompletedOrders()
         {
             Orders = new List<Order>();
         }
@@ -23,6 +23,7 @@ namespace Course_work
             }
             else
             {
+                Orders.Remove(order);
                 return false;
             }
         }
@@ -30,10 +31,8 @@ namespace Course_work
         {
             foreach (var item in Orders.ToList())
             {
-                if (item.Storage.ExecuteOrder(item))
-                {
-                    Orders.Remove(item);
-                }
+                item.Storage.ExecuteOrder(item);
+                Orders.Remove(item);
             }
         }
 

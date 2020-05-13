@@ -8,11 +8,11 @@ namespace Course_work
     {
         public string Name;
 
-        public List<Product> Products = new List<Product>();
-        NotComplitedOrders NotComplitedOrders = new NotComplitedOrders();
-        List<ComplitedOrder> HistoryOrder = new List<ComplitedOrder>();
+        public List<Pair<Product,int>> Products = new List<Pair<Product,int>>();
+        public NotCompletedOrders NotCompletedOrders = new NotCompletedOrders();
+        public List<CompletedOrder> HistoryOrder = new List<CompletedOrder>();
 
-        public Storage(List<Product> products, string name)
+        public Storage(List<Pair<Product,int>> products, string name)
         {
             Products = products;
             Name = name;
@@ -29,7 +29,10 @@ namespace Course_work
                 {
                     if (orderProducts[i].Product.Id == orderProducts[j].Product.Id && i != j) 
                     { 
-                        orderProducts[i].QuantityToOrder += orderProducts[j].QuantityToOrder; 
+                        orderProducts[i].QuantityToOrder += orderProducts[j].QuantityToOrder;
+                        orderProducts.RemoveAt(j);
+                        i = 0;
+                        j = 0;
                     }
                 }
             }
@@ -40,7 +43,7 @@ namespace Course_work
         {
             foreach (var item in Products)
             {
-                if (item.Id == product.Id && item.Quantity >= quantity)
+                if (item.First.Id == product.Id && item.Second >= quantity)
                 {
                     return true;
                 }
@@ -49,21 +52,20 @@ namespace Course_work
         }
         public bool ExecuteOrder(Order order)
         {
-            List<OrderProduct> purchasequeue = new List<OrderProduct>();
             bool executable = true;
             foreach (OrderProduct item in order.OrderProducts)
             {
                 if (!CheckInStock(item.Product, item.QuantityToOrder)) { executable = false; break; }
-                }
+            }
             if (executable)
             {
                 foreach (OrderProduct item in order.OrderProducts)
                 {
                     foreach (var product in Products)
                     {
-                        if (item.Product.Id == product.Id)
+                        if (item.Product.Id == product.First.Id)
                         {
-                            product.RealseOrder(item.QuantityToOrder);
+                            SendProduct(product,item.QuantityToOrder);
                         }
                     }
                 }
@@ -72,34 +74,42 @@ namespace Course_work
             }
             else
             {
-                NotComplitedOrders.Orders.Add(order);
+                NotCompletedOrders.Orders.Add(order);
             }
             return executable;
         }
         public void AddToHistory(Order order)
         {
-            ComplitedOrder complitedOrder = new ComplitedOrder(order.OrderProducts, order.Customer, DateTime.Now, order.Storage);
+            CompletedOrder complitedOrder = new CompletedOrder(order.OrderProducts, order.Customer, DateTime.Now, order.Storage);
             HistoryOrder.Add(complitedOrder);
         }
-        public void AddProduct(Product product)
+        public void AddProduct(Product product, int quantity)
         {
             bool available = false;
             if (Products != null)
             {
                 foreach (var item in Products)
                 {
-                    if (product.Id == item.Id)
+                    if (product.Id == item.First.Id)
                     {
-                        item.AddQuantity(product.Quantity);
+                        item.Second+=quantity;
                         available = true;
                     }
                 }
             }
             if (!available)
             {
-                Products.Add(new Product(product, product.Quantity));
+                var pair = new Pair<Product, int>();
+                pair.First = new Product(product);
+                pair.Second = quantity;
+                Products.Add(pair);
             }
-            NotComplitedOrders.TryExecuteAllOrders();
+            
+            NotCompletedOrders.TryExecuteAllOrders();
+        }
+        public void SendProduct(Pair<Product,int> pair, int quantity)
+        {
+            pair.Second -= quantity;
         }
     }
 }

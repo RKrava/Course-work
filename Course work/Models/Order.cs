@@ -25,7 +25,7 @@ namespace Course_work
         {
             completed = true;
             NumberOfOrders -= 1;
-            Console.WriteLine($"Order #{Ordernumber} Completed!!");
+            Console.WriteLine($"Order #{Ordernumber} Completed!!"); // delegat
         }
         public List<OrderProduct> OrderProducts { get; set; }
         public Storage Storage { get; set; }
