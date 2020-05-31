@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Course_work.Models
+﻿namespace Course_work.Models
 {
-    public class Pair<T, U>
+    public class Pair<T, U> // клас який ми використовуємо для зберігання одразу двох елементів данних (продукту та кількості)
     {
         public Pair()
         {
@@ -16,7 +12,9 @@ namespace Course_work.Models
             this.Second = second;
         }
 
-        public T First { get; set; }
-        public U Second { get; set; }
+        #region Properties
+        public T First { get; set; } // перший елемент
+        public U Second { get; set; } // другий елемент
+        #endregion
     }
 }

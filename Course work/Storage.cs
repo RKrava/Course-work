@@ -4,13 +4,15 @@ using Course_work.Models;
 
 namespace Course_work
 {
-    public class Storage
+    public class Storage // клас який характирезує склад
     {
-        public string Name;
+        public string Name; // ім'я складу
 
-        public List<Pair<Product,int>> Products = new List<Pair<Product,int>>();
-        public NotCompletedOrders NotCompletedOrders = new NotCompletedOrders();
-        public List<CompletedOrder> HistoryOrder = new List<CompletedOrder>();
+        #region Properties
+        public List<Pair<Product,int>> Products = new List<Pair<Product,int>>(); // Список пар об'єктів класу Продукт та Кількість продукту 
+        public NotCompletedOrders NotCompletedOrders = new NotCompletedOrders(); // Список не завершених замовлень
+        public List<CompletedOrder> HistoryOrder = new List<CompletedOrder>();   // Список завершених замовлень
+        #endregion
 
         public Storage(List<Pair<Product,int>> products, string name)
         {
@@ -21,7 +23,7 @@ namespace Course_work
         {
             Name = name;
         }
-        public Order MakeOrder(Customer customer, List<OrderProduct> orderProducts)
+        public Order MakeOrder(Customer customer, List<OrderProduct> orderProducts) // метод створення замовлення
         {
             for(int i = 0; i < orderProducts.Count; i++)
             {
@@ -39,7 +41,7 @@ namespace Course_work
             Order order = new Order(orderProducts, customer, this);
             return order;
         }
-        public bool CheckInStock(Product product, int quantity)
+        public bool CheckInStock(Product product, int quantity) // метод перевірки нужної кількості продукту в наявності
         {
             foreach (var item in Products)
             {
@@ -50,7 +52,7 @@ namespace Course_work
             }
             return false;
         }
-        public bool ExecuteOrder(Order order)
+        public bool ExecuteOrder(Order order) // метод для виконання замовлення
         {
             bool executable = true;
             foreach (OrderProduct item in order.OrderProducts)
@@ -78,12 +80,12 @@ namespace Course_work
             }
             return executable;
         }
-        public void AddToHistory(Order order)
+        public void AddToHistory(Order order) // метод додавання замовлення в історію
         {
             CompletedOrder complitedOrder = new CompletedOrder(order.OrderProducts, order.Customer, DateTime.Now, order.Storage);
             HistoryOrder.Add(complitedOrder);
         }
-        public void AddProduct(Product product, int quantity)
+        public void AddProduct(Product product, int quantity) // метод додавання продукту на склад
         {
             bool available = false;
             if (Products != null)
@@ -107,7 +109,7 @@ namespace Course_work
             
             NotCompletedOrders.TryExecuteAllOrders();
         }
-        public void SendProduct(Pair<Product,int> pair, int quantity)
+        public void SendProduct(Pair<Product,int> pair, int quantity) // метод відправки продукту 
         {
             pair.Second -= quantity;
         }

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Course_work
+﻿namespace Course_work
 {
-    public class Product
+    public class Product // клас який характирезує Продукт
     {
-        public string Title;
-        public int Id { get; set; }
+        #region Properties
+        public string Title; // ім'я продукту
+        public int Id { get; set; } // Айди продукту
+        #endregion
         public Product(int id, string title)
         {
             Id = id;

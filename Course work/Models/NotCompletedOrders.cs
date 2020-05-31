@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Course_work
 {
-    public class NotCompletedOrders
+    public class NotCompletedOrders // клас замовлень які ще не завершились
     {
-        public List<Order> Orders { get; set; }
-
+        #region Properties
+        public List<Order> Orders { get; set; } // список не завершенних замовлень
+        #endregion
         public NotCompletedOrders()
         {
             Orders = new List<Order>();
         }
-        public bool TryExecuteLastOrder()
+        public bool TryExecuteLastOrder() // метод для запуска одного замовлення 
         {
             Order order = Orders.Last();
             if (order.Storage.ExecuteOrder(order))
@@ -27,7 +26,7 @@ namespace Course_work
                 return false;
             }
         }
-        public void TryExecuteAllOrders()
+        public void TryExecuteAllOrders() // метод для запуска всіх не завершених замовлень 
         {
             foreach (var item in Orders.ToList())
             {

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Course_work
+﻿namespace Course_work
 {
-    public class Customer
+    public class Customer // клас який характирезує замовника
     {
-        public string Name;
+        public string Name; // ім'я замовника
         public Customer(string name)
         {
             Name = name;

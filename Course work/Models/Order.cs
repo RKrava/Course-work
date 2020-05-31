@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Course_work.Models;
 
 namespace Course_work
 {
-    public class Order
+    public class Order : IOrder
     {
-        static int NumberOfOrders = 0;
-        bool completed = false;
+        public delegate void OrderComplete(string message); // об'являємо тип делегата 
+        public static event OrderComplete Notify; // подія яка буде викликатись при завершення замовлення
+        static int NumberOfOrders = 0; 
         public Order(List<OrderProduct> orderProducts, Customer customer, Storage storage)
         {
             OrderProducts = orderProducts;
@@ -16,20 +15,16 @@ namespace Course_work
             Ordernumber = ++NumberOfOrders;
             Storage = storage;
         }
-        public Order(List<OrderProduct> orderProducts)
+        public void CompleteOrder() // метод заверщення замовлення
         {
-            OrderProducts = orderProducts;
-            Ordernumber = ++NumberOfOrders;
-        }
-        public void CompleteOrder()
-        {
-            completed = true;
             NumberOfOrders -= 1;
-            Console.WriteLine($"Order #{Ordernumber} Completed!!"); // delegat
+            Notify?.Invoke($"Order #{Ordernumber} Completed!!");
         }
+        #region Properties
         public List<OrderProduct> OrderProducts { get; set; }
         public Storage Storage { get; set; }
         public Customer Customer { get; set; }
         public int Ordernumber { get; set; }
+        #endregion
     }
 }
